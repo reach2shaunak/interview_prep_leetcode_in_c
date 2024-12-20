@@ -3,7 +3,11 @@
  */
 #include<stdio.h>
 #include<stdbool.h>
-#include"./uthash.h"
+
+/* 
+ *Solution 1:  Using UTHASH. This needs the header file uthash.h 
+ */
+/*#include"./uthash.h"
 
 typedef struct {
 	int key;
@@ -41,7 +45,37 @@ bool contains_dup(int *nums, size_t numsize)
 	}	
 	return flag;
 }
+*/
 
+/*
+ * Solution 2:Using simple hash technique of static array 
+ */
+#define SIZE 20
+
+int hashArray[SIZE]={0};
+
+int hashCode(int item)
+{
+        return item % SIZE;
+}
+
+bool contains_dup(int* nums, int numsSize){
+    int i = 0, code = 0;
+
+        bool flag = false;
+        //get each of the elements from the input array 
+        for(i=0; i<numsSize; i++) {
+                //get the hash
+                code =hashCode(nums[i]);
+                //check if empty or already there
+                if(hashArray[code] == 0)
+                        hashArray[code] = nums[i];
+                else 
+                        flag = true;
+
+        }
+        return flag;
+}
 int main()
 {
 	int nums[]={1,2,3,4,5};
