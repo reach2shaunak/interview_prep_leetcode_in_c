@@ -3,7 +3,7 @@
  */
 #include<stdio.h>
 #include<stdbool.h>
-
+#include<stdlib.h>
 /* 
  *Solution 1:  Using UTHASH. This needs the header file uthash.h 
  */
@@ -50,7 +50,7 @@ bool contains_dup(int *nums, size_t numsize)
 /*
  * Solution 2:Using simple hash technique of static array 
  */
-#define SIZE 20
+/*#define SIZE 20
 
 int hashArray[SIZE]={0};
 
@@ -75,11 +75,52 @@ bool contains_dup(int* nums, int numsSize){
 
         }
         return flag;
+}*/
+
+/*
+ * Solution 3: Using hashset
+ */
+
+typedef struct {
+	bool *set;
+}Myhashset;
+
+Myhashset *hashsetcreate()
+{
+	Myhashset *obj = (Myhashset *)malloc(sizeof(Myhashset));
+	obj->set = (bool *)malloc(100 *sizeof(bool));
+
+	return obj;
 }
+void Myhashsetadd(Myhashset *obj, int key)
+{
+	obj->set[key] = true;
+}
+
+bool MyhashsetContains(Myhashset *obj, int key)
+{
+	return obj->set[key];
+}
+
+bool contains_dup_hashset(int* nums, int numsSize, Myhashset *obj)
+{
+	for(int i=0;i<numsSize;i++) {
+		if(MyhashsetContains(obj,nums[i]))
+			return true;
+		else
+			Myhashsetadd(obj, nums[i]);
+	}
+	return false;
+}
+
 int main()
 {
 	int nums[]={1,2,3,4,5};
-	bool ret = contains_dup(nums,sizeof(nums)/sizeof(int));
+	//Solution 3
+	Myhashset *obj = hashsetcreate();
+
+	bool ret = contains_dup_hashset(nums,sizeof(nums)/sizeof(int),obj);
+	//bool ret = contains_dup(nums,sizeof(nums)/sizeof(int));
 
 	if(ret)
 		printf("duplicate element is present\n");
